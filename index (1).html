@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Love Page</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1531592522013-f9a1f6c6e65f?auto=format&fit=crop&w=1500&q=80') no-repeat center center;
+      background-size: cover;
+      backdrop-filter: brightness(0.9) blur(2px);
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      padding: 1rem;
+      z-index: 10;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: #fff;
+      margin-bottom: 40px;
+      text-shadow: 2px 2px 8px rgba(255, 0, 128, 0.8);
+      animation: fadeIn 2s ease-in;
+    }
+
+    .buttons {
+      position: relative;
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      font-size: 1.8rem;
+      padding: 1em 2.2em;
+      border: none;
+      border-radius: 15px;
+      background: linear-gradient(145deg, #ff66b2, #ff1493);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 12px 25px rgba(255, 20, 147, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 10;
+    }
+
+    .btn:hover {
+      background-color: #ff3399;
+      transform: scale(1.08);
+      box-shadow: 0 15px 30px rgba(255, 105, 180, 0.4);
+    }
+
+    .emoji {
+      position: fixed;
+      top: -40px;
+      font-size: 2rem;
+      animation: fall linear forwards;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.9;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      .btn {
+        font-size: 1.4rem;
+        padding: 0.8em 1.6em;
+      }
+
+      .buttons {
+        gap: 20px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Do your eyes see the same love I feel for you ?💕🌼</h1>
+    <div class="buttons">
+      <button class="btn" onclick="startEverything()">YES❣💖</button>
+      <button class="btn" id="naBtn" onclick="moveNa()">NO💢</button>
+    </div>
+  </div>
+
+  <!-- 🎵 Your background music from Pixabay -->
+  <audio id="bgMusic" loop>
+    <source src="https://cdn.pixabay.com/audio/2022/10/25/audio_8da749cef4.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    let showerStarted = false;
+    let naClickCount = 0;
+    let musicStarted = false;
+
+    function startEverything() {
+      startEmojiShower();
+      playMusic();
+    }
+
+    function playMusic() {
+      if (!musicStarted) {
+        const audio = document.getElementById('bgMusic');
+        audio.volume = 0.5;
+        audio.play().catch(err => console.log("Autoplay blocked, will play after interaction."));
+        musicStarted = true;
+      }
+    }
+
+    function startEmojiShower() {
+      if (showerStarted) return;
+      showerStarted = true;
+
+      const emojis = ['❤️', '💘', '💖', '💗', '💕', '💞'];
+
+      setInterval(() => {
+        const emoji = document.createElement('div');
+        emoji.classList.add('emoji');
+        emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.left = Math.random() * 100 + 'vw';
+        emoji.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        emoji.style.fontSize = (Math.random() * 20 + 25) + 'px';
+        emoji.style.animationDelay = Math.random() + 's';
+        document.body.appendChild(emoji);
+
+        setTimeout(() => emoji.remove(), 6000);
+      }, 150);
+    }
+
+    function moveNa() {
+      const naBtn = document.getElementById('naBtn');
+      naClickCount++;
+
+      if (naClickCount >= 5) {
+        naBtn.remove();
+        return;
+      }
+
+      const randX = Math.random() * (window.innerWidth - naBtn.offsetWidth);
+      const randY = Math.random() * (window.innerHeight - naBtn.offsetHeight);
+
+      naBtn.style.position = 'fixed';
+      naBtn.style.left = randX + 'px';
+      naBtn.style.top = randY + 'px';
+
+      playMusic(); // play music if NO is clicked too
+    }
+  </script>
+
+</body>
+</html>
